@@ -2,8 +2,6 @@
 #include <vector>
 #include "matrix.h"
 
-using namespace std;
-
 template<typename T>
 matrix<T>::matrix(size_t _rows, size_t _cols, const T& elements) {
   M.resize(_rows);
@@ -17,6 +15,16 @@ matrix<T>::matrix(size_t _rows, size_t _cols, const T& elements) {
 template<typename T>
 matrix<T>::~matrix() {
   cout<<"object destructed"<<endl;
+}
+
+template<typename T>
+size_t matrix<T>::get_rows() const {
+  return rows;
+}
+
+template<typename T>
+size_t matrix<T>::get_cols() const {
+  return cols;
 }
 
 template<typename T>
@@ -34,6 +42,7 @@ matrix<T>& matrix<T>::operator=(const matrix<T>& cp) {
 
   for (size_t i = 0; i < n_rows; i++) {
     for (size_t j = 0; j < n_cols; j++) {
+      //M[i][j] = cp(i, j);
       M[i][j] = cp[i][j];
     }
   }
