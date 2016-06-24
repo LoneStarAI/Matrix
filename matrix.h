@@ -27,7 +27,6 @@ public:
   matrix(string csv); // initialize from a csv file
   ~matrix();
   const T& operator()(const size_t& row, const size_t& col) const;
-  matrix<T>& matrix<T>::operator=(const matrix<T>& cp) {
   vector<T> sumOfAllCols();
   vector<T> sumOfAllRows();
   size_t get_rows() const;
