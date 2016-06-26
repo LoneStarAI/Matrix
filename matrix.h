@@ -26,11 +26,14 @@ public:
   matrix(const matrix<T>& cp);
   matrix(string csv); // initialize from a csv file
   ~matrix();
-  const T& operator()(const size_t& row, const size_t& col) const;
-  vector<T> sumOfAllCols();
-  vector<T> sumOfAllRows();
   size_t get_rows() const;
   size_t get_cols() const;
+  matrix<T>& operator=(const matrix<T>& cp); 
+  const T& operator()(const size_t& _row, const size_t& _col) const;
+  void print() const;
+
+  vector<T> sumOfAllCols();
+  vector<T> sumOfAllRows();
 };
 
 #endif /*MATRIX_H*/
