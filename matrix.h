@@ -24,13 +24,15 @@ public:
   // Constructor
   matrix(size_t _rows, size_t _cols, const T& elements);
   matrix(const matrix<T>& cp);
-  matrix(string csv); // initialize from a csv file
+  matrix(const string csv); // initialize from a csv file
   ~matrix();
   size_t get_rows() const;
   size_t get_cols() const;
   matrix<T>& operator=(const matrix<T>& cp); 
   const T& operator()(const size_t& _row, const size_t& _col) const;
+  T& operator()(const size_t& _row, const size_t& _col);
   void print() const;
+  bool rangeCheck(const size_t& _row, const size_t& _col) const;
 
   vector<T> sumOfAllCols();
   vector<T> sumOfAllRows();
