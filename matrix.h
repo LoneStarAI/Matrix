@@ -1,6 +1,6 @@
 /* 
 author: De Wang
-desc: matrix library
+desc: minimum matrix lib
 */
 #ifndef MATRIX_H 
 #define MATRIX_H 
@@ -15,7 +15,7 @@ template<typename T>
 class matrix {
 private:
   typedef vector<T> Vec;
-  typedef vector<vector<T> > Mat; // space before > > in case that the compiler takes it as ">>"
+  typedef vector<vector<T> > Mat;
   size_t rows;
   size_t cols;
   Mat M;
@@ -29,9 +29,8 @@ public:
   size_t get_rows() const;
   size_t get_cols() const;
   matrix<T>& operator=(const matrix<T>& cp); 
-  const T& operator()(const size_t& _row, const size_t& _col) const;
   T& operator()(const size_t& _row, const size_t& _col);
-  void print() const;
+  void print();
   bool rangeCheck(const size_t& _row, const size_t& _col) const;
 
   vector<T> sumOfAllCols();

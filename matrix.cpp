@@ -1,6 +1,8 @@
 #ifndef MATRIX_CPP
 #define MATRIX_CPP
 
+#include <fstream>
+#include <sstream>
 #include <stdexcept>
 #include "matrix.h"
 
@@ -22,8 +24,35 @@ matrix<T>::matrix(const matrix<T>& cp) {
 }
 
 template<typename T>
-matrix<T>::matrix(const string csv) {  // initialize the matrix from a CSV file
+matrix<T>::matrix(const string csv) {
+  // initialize the matrix from a CSV file
+  cout<<"initializing from csv file: "<<csv<<endl;
+  ifstream in(csv);
+  vector<T> row;
+  string line, val;
+  T data;
+
+  while (!in.eof()) {
+    getline(in, line);
+    istringstream iss(line);
+    while (!iss.eof() && line.length() > 0) {
+      getline(iss, val, ',');
+      //data = (T)atof(val.c_str()); 
+      data = (T)stof(val);
+      row.push_back(data);
+    }
+  this->M.push_back(row);
+  row.clear();
+  }
   
+  // set rows and cols
+  this->rows = M.size();
+  cout<< "M size: " << M.size();
+  if (M.size() > 0) {
+    this->cols = M[0].size();
+  } else {
+    this->cols = 0;
+  }
 }
 
 template<typename T>
@@ -48,14 +77,12 @@ matrix<T>& matrix<T>::operator=(const matrix<T>& cp) {
   return *this;
 }
 
-template<typename T>
-const T& matrix<T>::operator()(const size_t& _row, const size_t& _col) const{
-  return this->M[_row][_col];
-}
 
 template<typename T>
 T& matrix<T>::operator()(const size_t& _row, const size_t& _col){
+  rangeCheck(_row, _col);
   return this->M[_row][_col];
+  //return (this->M).at(_row).at(_col);  // will do range check implicitly
 }
 
 template<typename T>
@@ -84,17 +111,17 @@ template<typename T>
 bool matrix<T>::rangeCheck(const size_t& _row, const size_t& _col) const {
   if (_row < 0 || _row >= rows) {
     cout<<"row index must be in [0, "<< rows <<"]"<<endl;
-    return false;
+    throw out_of_range("Index OUT_OF_RANGE!");
   }
   if (_col < 0 || _col >= cols) {
     cout<<"coloum index must be in [0, "<< cols <<"]"<<endl;
-    return false;
+    throw out_of_range("Index OUT_OF_RANGE!");
   }
   return true;
 }
 
 template<typename T>
-void matrix<T>::print() const {
+void matrix<T>::print() {
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
       //cout<<this->M[i][j]<< ' ';
@@ -108,13 +135,14 @@ int main() {
   matrix<double> m(3, 2, 0.0);
   size_t rows = m.get_rows();
   size_t cols = m.get_cols();
-  cout<<"matrix: "<<endl;
+  //cout<<"matrix: "<<endl;
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
       m(i, j) = i * cols + j + 1.0;
       //(&m)->M; m.M; // error, M is private
     }
   }
+  matrix<double> m_csv("input.csv");
   m.print();
   // sum of cols
   vector<double> res = m.sumOfAllCols();
