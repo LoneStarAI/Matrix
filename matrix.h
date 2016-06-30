@@ -19,6 +19,7 @@ private:
   size_t rows;
   size_t cols;
   Mat M;
+  vector<string> fields;
 
 public:
   // Constructors & destructors

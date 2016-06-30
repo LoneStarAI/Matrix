@@ -31,8 +31,9 @@ matrix<T>::matrix(const string csv, const T& fill) {
   vector<T> row;
   string line, val;
   T data;
-
+  
   // parse each element into matrix
+  bool FLAG = false;  // record whether header line is processed
   while (!in.eof()) {
     getline(in, line);
     istringstream iss(line);
@@ -40,7 +41,11 @@ matrix<T>::matrix(const string csv, const T& fill) {
       getline(iss, val, ',');
       try {
         if (val.length() > 0 && val != " ") {
-          data = (T)stof(val);
+          if (FLAG == false) {
+            this->fields.push_back(val);
+          } else {
+            data = (T)stof(val);
+          }
         } else {
           data = fill;
         }
@@ -49,9 +54,12 @@ matrix<T>::matrix(const string csv, const T& fill) {
         " are allowed." << endl;
         throw e;
       }
-      row.push_back(data);
+      if (FLAG == true) {
+        row.push_back(data);
+      }
     }
 
+    FLAG = true;
     if (row.size() > 0) {
       this->M.push_back(row);
       row.clear();
