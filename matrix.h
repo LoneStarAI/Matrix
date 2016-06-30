@@ -1,6 +1,6 @@
 /* 
 author: De Wang
-desc: minimum matrix lib
+desc: mini matrix lib
 */
 #ifndef MATRIX_H 
 #define MATRIX_H 
@@ -21,18 +21,25 @@ private:
   Mat M;
 
 public:
-  // Constructor
+  // Constructors & destructors
   matrix(size_t _rows, size_t _cols, const T& elements);
   matrix(const matrix<T>& cp);
-  matrix(const string csv); // initialize from a csv file
+  matrix(const string csv, const T& fill=0.0); // initialize from a csv file
   ~matrix();
+  
+  // getter
   size_t get_rows() const;
   size_t get_cols() const;
+
+  // operator overload
   matrix<T>& operator=(const matrix<T>& cp); 
   T& operator()(const size_t& _row, const size_t& _col);
+
+  // utility methods 
   void print();
   bool rangeCheck(const size_t& _row, const size_t& _col) const;
 
+  // math functions
   vector<T> sumOfAllCols();
   vector<T> sumOfAllRows();
 };
