@@ -23,9 +23,10 @@ private:
 
 public:
   // Constructors & destructors
-  matrix(size_t _rows, size_t _cols, const T& elements);
+  matrix(size_t _rows, size_t _cols, const T& elements=0.0,
+         const string str="col");
   matrix(const matrix<T>& cp);
-  matrix(const string csv, const T& fill=0.0); // initialize from a csv file
+  matrix(const string csv, const T& fill=0.0); // initialize from csv
   ~matrix();
   
   // getter

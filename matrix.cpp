@@ -7,13 +7,22 @@
 #include "matrix.h"
 
 template<typename T>
-matrix<T>::matrix(size_t _rows, size_t _cols, const T& elements) {
+matrix<T>::matrix(size_t _rows, size_t _cols, const T& elements, const string str) {
+  cout << "intializing from default constructor with default elements"
+       "and default fields." << endl;
   this->M.resize(_rows);
   for (size_t i = 0; i < _rows; i++) {
     this->M[i].resize(_cols, elements);
   }
   this->rows = _rows;
   this->cols = _cols;
+  
+  // initialize field names to default values
+  this->fields.resize(_cols);
+  for (size_t i = 0; i < _cols; i++) {
+    this->fields[i] = str + to_string(i);
+  } 
+   
 }
 
 template<typename T>
@@ -21,6 +30,7 @@ matrix<T>::matrix(const matrix<T>& cp) {
   this->M = cp.M;
   this->rows = cp.rows;
   this->cols = cp.cols;
+  this->fields = cp.fields;
 }
 
 template<typename T>
@@ -32,8 +42,15 @@ matrix<T>::matrix(const string csv, const T& fill) {
   string line, val;
   T data;
   
+  //process header line
+  getline(in, line);
+  istringstream iss(line);
+  while (!iss.eof() && line.length() > 0) {
+    getline(iss, val, ',');
+    this->fields.push_back(val);
+  }
+
   // parse each element into matrix
-  bool FLAG = false;  // record whether header line is processed
   while (!in.eof()) {
     getline(in, line);
     istringstream iss(line);
@@ -41,11 +58,7 @@ matrix<T>::matrix(const string csv, const T& fill) {
       getline(iss, val, ',');
       try {
         if (val.length() > 0 && val != " ") {
-          if (FLAG == false) {
-            this->fields.push_back(val);
-          } else {
-            data = (T)stof(val);
-          }
+          data = (T)stof(val);
         } else {
           data = fill;
         }
@@ -54,12 +67,9 @@ matrix<T>::matrix(const string csv, const T& fill) {
         " are allowed." << endl;
         throw e;
       }
-      if (FLAG == true) {
-        row.push_back(data);
-      }
+      row.push_back(data);
     }
 
-    FLAG = true;
     if (row.size() > 0) {
       this->M.push_back(row);
       row.clear();
@@ -143,6 +153,15 @@ bool matrix<T>::rangeCheck(const size_t& _row, const size_t& _col) const {
 
 template<typename T>
 void matrix<T>::print() {
+  // print fields
+  for (vector<string>::iterator it = this->fields.begin();
+       it != this->fields.end(); it++) {
+    cout << *it << "  ";
+  }
+
+  cout << endl;
+
+  // print matrix values
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
       cout << (*this)(i, j) << "    ";
@@ -166,9 +185,10 @@ int main() {
     }
   }
   
+  m.print();
   // initilize from a csv file
+  cout << endl;
   matrix<double> m_csv("input.csv");
-  cout << "matrix: " << endl;
   m_csv.print();
 
   // sum of cols
@@ -189,6 +209,8 @@ int main() {
   }
 
   // corner case: 0 rows, 0 cols
+  cout << endl << endl;
+  cout << "corner cases: 0 rows, 0 cols" << endl;
   matrix<double> m1(0, 0, 0.0);  
   m1.print();
   vector<double> res1 = m1.sumOfAllCols();
