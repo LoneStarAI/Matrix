@@ -9,7 +9,7 @@
 template<typename T>
 matrix<T>::matrix(size_t _rows, size_t _cols, const T& elements, const string str) {
   cout << "intializing from default constructor with default elements"
-       "and default fields." << endl;
+       " and default fields." << endl;
   this->M.resize(_rows);
   for (size_t i = 0; i < _rows; i++) {
     this->M[i].resize(_cols, elements);
